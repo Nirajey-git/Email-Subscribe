@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+sqlalchemy
+apscheduler
+email-validator
+python-dotenvcd
