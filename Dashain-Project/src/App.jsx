@@ -15,12 +15,14 @@ export const App = () => {
   return (
     <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-[#F8F8FF] text-black'} `}>
       <button onClick={handleDarkMode} className='absolute top-2 right-7 text-3xl cursor-pointer'>{darkMode ? '🌙' : '☀️'}</button>
-      <div className='m-0 w-full h-[100vh] flex flex-col items-center justify-center'>
+      {/* <div className='m-0 w-full h-[100vh] flex flex-col items-center justify-center'> */}
+      <>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/aboutblog' element={<AboutBlog/>} />
         </Routes>
-      </div>
+        </>
+      {/* </div> */}
       
         
     </div>

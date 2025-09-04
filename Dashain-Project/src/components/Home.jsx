@@ -44,7 +44,7 @@ export const Home = () => {
 };
 
 return (
-    <div className='m-0 w-full h-auto flex flex-col items-center justify-center'>
+    <div className='m-0 w-full h-[100vh] flex flex-col items-center justify-center'>
         <div className='flex flex-col items-center justify-center'>
     <img src={dashain} alt="dashain-image" className='h-[150px]'/>
     <h1 className='mt-2 font-serif text-4xl'> Happy Dashain !</h1>

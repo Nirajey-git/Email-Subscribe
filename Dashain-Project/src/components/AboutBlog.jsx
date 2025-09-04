@@ -1,48 +1,101 @@
-import React, { use } from 'react'
-import { useState, useEffect } from 'react';
-import { client} from '../sanity';
-import {PortableText} from '@portabletext/react';
-import { NavLink } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react'
+import { client } from '../sanity'
+import { PortableText } from '@portabletext/react'
+import { NavLink } from 'react-router-dom'
+import { urlFor } from '../sanity' // make sure you added urlFor in sanity.js
 
 export const AboutBlog = () => {
-    const [posts, setposts] = useState([]);
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        client.fetch(`*[_type == "post"] {title, description, publishedAt}`)
-        .then((data) => {
-            console.log("sanity data", data);
-            setposts(data)})
-        .catch(console.error);
-    }, []);
-return (
-    <div className='mt-8 h-full flex flex-col px-4'>
-        <div className=' absolute top-5 left-6 flex justify-start items-start'>
-        <NavLink to={'/'}>
-            <button className='p-2 bg-indigo-500 rounded-2xl w-[100px] text-white hover:bg-indigo-600'>← Back</button>
-        </NavLink>
-        </div>
-        <div className='mt-10'>
-        <h1 className='text-2xl font-bold'>Dashain Blogs</h1>
-        {posts.length === 0 ? (
-        <p>Loading posts...</p>
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "post"]{
+          title,
+          publishedAt,
+          body,
+          author->{
+            name,
+            bio,
+            image
+          }
+        } | order(publishedAt desc)`
+      )
+      .then((data) => {
+        setPosts(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error("Error fetching posts:", err)
+        setLoading(false)
+      })
+  }, [])
+
+  return (
+    <div className="h-auto min-h-screen flex justify-center px-4">
+      <div className="mt-12 w-full max-w-3xl">
+        <h1 className="text-3xl font-bold text-center mb-6">Dashain Blogs</h1>
+
+        {loading ? (
+          <p className="text-center">Loading posts...</p>
+        ) : posts.length === 0 ? (
+          <p className="text-center">No posts found.</p>
         ) : (
-        
-        posts.map((post, index) => (
-            <div key={index} className="mt-3 mb-4 w-full p-3 rounded-lg">
-            <h2 className='font-bold text-xl text-center'>{post.title}</h2>
-            <div>
-                {/* {post.body && <PortableText value={post.body} />} */}
-                {post.description && <PortableText value={post.description}/>}
+          posts.map((post, index) => (
+            <div
+              key={index}
+              className="mt-6 mb-6 w-full p-5 rounded-2xl shadow-md bg-[#F0F8FF]]"
+            >
+             
+              <h2 className="font-bold text-2xl text-center">{post.title}</h2>
+
+           
+              {post.body && (
+                <div className="mt-3 text-justify leading-relaxed">
+                  <PortableText value={post.body} />
+                </div>
+              )}
+
+              
+              {post.author && (
+                <div className="mt-4 flex items-center gap-4">
+                  {post.author.image && (
+                    <img
+                      src={urlFor(post.author.image).width(80).url()}
+                      alt={post.author.name}
+                      className="rounded-full w-16 h-16 object-cover"
+                    />
+                  )}
+                  <div>
+                    <p className="font-semibold">{post.author.name}</p>
+                    {post.author.bio && (
+                      <div className="text-sm text-gray-600">
+                        <PortableText value={post.author.bio} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              
+              <small className="text-gray-500 block mt-3">
+                Published At:{" "}
+                {new Date(post.publishedAt).toLocaleDateString()}
+              </small>
             </div>
-            <small className='text-gray-500'>
-                Published At: {new Date(post.publishedAt).toLocaleDateString()}
-            </small>
-            </div>
-        ))
+          ))
         )}
-        </div>
-        
+      </div>
+
+     
+      <div className="absolute top-3 left-6 flex justify-start items-start">
+        <NavLink to={"/"}>
+          <button className="p-2 bg-indigo-500 rounded-2xl w-[100px] text-white hover:bg-indigo-600">
+            ← Back
+          </button>
+        </NavLink>
+      </div>
     </div>
-);
-};
+  )
+}
