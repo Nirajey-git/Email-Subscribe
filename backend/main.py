@@ -18,15 +18,15 @@ load_dotenv()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or specify your frontend URL
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Create tables
+
 Base.metadata.create_all(bind=engine)
 
-# Dependency to get DB session
+
 def get_db():
     db = SessionLocal()
     try:
@@ -34,11 +34,11 @@ def get_db():
     finally:
         db.close()
 
-# Pydantic schema
+
 class SubscribeRequest(BaseModel):
     email: EmailStr
 
-# Subscribe endpoint
+
 @app.post("/subscribe/")
 def subscribe(request: SubscribeRequest, db: Session = Depends(get_db)):
     if db.query(Subscriber).filter(Subscriber.email == request.email).first():
@@ -62,13 +62,12 @@ def subscribe(request: SubscribeRequest, db: Session = Depends(get_db)):
 
     return {"message": "Subscribed successfully!"}
 
-# Function to calculate days left
+
 def get_days_left():
     today = datetime.now()
     dashain_date = datetime(2025, 10, 2)
     return (dashain_date - today).days
 
-# Function to send emails
 def send_daily_email():
     db = SessionLocal()
     subscribers = db.query(Subscriber).all()
@@ -90,7 +89,6 @@ def send_daily_email():
 
     db.close()
 
-# Schedule daily email at server startup
 scheduler = BackgroundScheduler()
 scheduler.add_job(send_daily_email, "interval", days=1)
 scheduler.start()
