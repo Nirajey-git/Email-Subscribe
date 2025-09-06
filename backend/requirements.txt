@@ -3,4 +3,4 @@ uvicorn
 sqlalchemy
 apscheduler
 email-validator
-python-dotenvcd
+python-dotenv
