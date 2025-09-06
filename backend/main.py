@@ -13,6 +13,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+
+load_dotenv() 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Or specify your frontend URL
@@ -93,4 +96,3 @@ scheduler.add_job(send_daily_email, "interval", days=1)
 scheduler.start()
 
 
-load_dotenv() 
