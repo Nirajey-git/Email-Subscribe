@@ -92,7 +92,7 @@ def send_daily_email():
 
 # Schedule daily email at server startup
 scheduler = BackgroundScheduler()
-scheduler.add_job(send_daily_email, "interval", days=1)
+scheduler.add_job(send_daily_email, "interval", minutes=1)
 scheduler.start()
 
 
