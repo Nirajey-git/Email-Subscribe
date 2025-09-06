@@ -29,14 +29,14 @@ export const Home = () => {
     return;
     }
     try {
-    const res = await fetch("http://127.0.0.1:8000/subscribe/", {
+    const res = await fetch("https://email-subscribe-twrm.onrender.com/subscribe/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
     });
     const data = await res.json(); 
     setMessage(data.message || data.detail);
-    setEmail(" ");
+    setEmail("");
     } catch (err) {
     console.error(err);
     setMessage("Something went wrong");
@@ -64,7 +64,7 @@ return (
         <p className='mt-2 '>{message}</p>
     </div>
     <div className='mt-3'>
-        <NavLink to='/aboutblog'>
+        <NavLink to='/aboutblog' >
             <a href="" className='hover:text-blue-400'>Learn more About Dashain →</a> 
         </NavLink>
         
