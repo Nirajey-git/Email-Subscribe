@@ -19,7 +19,7 @@ export const Home = () => {
     useEffect(() => {
         const timer = setInterval(() => {
         setDaysLeft(calculateDaysLeft());
-        }, 60 * 1000);
+        }, 1000 * 60 * 60 * 24); 
         return () => clearInterval(timer);
     }, []);
 
